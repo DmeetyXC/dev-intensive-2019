@@ -23,6 +23,17 @@ data class User(
 
     constructor(id: String) : this(id, "John", "Doe")
 
+    constructor(builder: Builder) : this(
+        builder.id,
+        builder.firstName,
+        builder.lastName,
+        builder.avatar,
+        builder.rating,
+        builder.respect,
+        builder.lastVisit,
+        builder.isOnline
+    )
+
     init {
         println(
             "It's Alive!!!\n${
@@ -73,6 +84,6 @@ data class User(
         fun respect(respect: Int) = apply { this.respect = respect }
         fun lastVisit(lastVisit: Date?) = apply { this.lastVisit = lastVisit }
         fun isOnline(isOnline: Boolean) = apply { this.isOnline = isOnline }
-        fun build() = User(id)
+        fun build() = User(this)
     }
 }
