@@ -4,28 +4,33 @@ import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 data class User(
-        val id: String,
-        var firstName: String?,
-        var lastName: String?,
-        var avatar: String?,
-        var rating: Int = 0,
-        var respect: Int = 0,
-        val lastVisit: Date? = Date(),
-        val isOnline: Boolean = false
+    val id: String,
+    var firstName: String?,
+    var lastName: String?,
+    var avatar: String?,
+    var rating: Int = 0,
+    var respect: Int = 0,
+    val lastVisit: Date? = Date(),
+    val isOnline: Boolean = false
 ) {
 
-    constructor(id: String, firstName: String?, lastName: String?) : this(id, firstName, lastName, null)
+    constructor(id: String, firstName: String?, lastName: String?) : this(
+        id = id,
+        firstName = firstName,
+        lastName = lastName,
+        avatar = null
+    )
 
     constructor(id: String) : this(id, "John", "Doe")
 
     init {
         println(
-                "It's Alive!!!\n${
-                if (lastName === "Doe")
-                    "His name is $firstName $lastName"
-                else
-                    "And his name is $firstName $lastName!!!"
-                }\n"
+            "It's Alive!!!\n${
+            if (lastName === "Doe")
+                "His name is $firstName $lastName"
+            else
+                "And his name is $firstName $lastName!!!"
+            }\n"
         )
     }
 
@@ -42,57 +47,32 @@ data class User(
         }
     }
 
-    class Builder() {
-        private var id: String? = null
-        private var firstName: String? = null
-        private var lastName: String? = null
-        private var avatar: String? = null
-        private var rating: Int = 0
-        private var respect: Int = 0
-        private var lastVisit: Date? = null
-        private var isOnline: Boolean = false
+    class Builder {
+        var id: String = "${lastId++}"
+            private set
+        var firstName: String? = null
+            private set
+        var lastName: String? = null
+            private set
+        var avatar: String? = null
+            private set
+        var rating: Int = 0
+            private set
+        var respect: Int = 0
+            private set
+        var lastVisit: Date? = Date()
+            private set
+        var isOnline: Boolean = false
+            private set
 
-        fun id(value: String) {
-            id = value
-        }
-
-        fun firstName(value: String) {
-            firstName = value
-        }
-
-        fun lastName(value: String) {
-            lastName = value
-        }
-
-        fun avatar(value: String) {
-            avatar = value
-        }
-
-        fun rating(value: Int) {
-            rating = value
-        }
-
-        fun respect(value: Int) {
-            respect = value
-        }
-
-        fun lastVisit(value: Date) {
-            lastVisit = value
-        }
-
-        fun isOnline(value: Boolean) {
-            isOnline = value
-        }
-
-        fun build() = User(
-                id ?: (++lastId).toString(),
-                firstName,
-                lastName,
-                avatar,
-                rating,
-                respect,
-                lastVisit,
-                isOnline
-        )
+        fun id(id: String) = apply { this.id = id }
+        fun firstName(firstName: String?) = apply { this.firstName = firstName }
+        fun lastName(lastName: String?) = apply { this.lastName = lastName }
+        fun avatar(avatar: String?) = apply { this.avatar = avatar }
+        fun rating(rating: Int) = apply { this.rating = rating }
+        fun respect(respect: Int) = apply { this.respect = respect }
+        fun lastVisit(lastVisit: Date?) = apply { this.lastVisit = lastVisit }
+        fun isOnline(isOnline: Boolean) = apply { this.isOnline = isOnline }
+        fun build() = User(id)
     }
 }

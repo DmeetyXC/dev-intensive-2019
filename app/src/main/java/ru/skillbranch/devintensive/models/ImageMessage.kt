@@ -7,11 +7,11 @@ class ImageMessage(
         id: String,
         from: User?,
         chat: Chat,
-        isIncoming: Boolean = false,
+        isIncoming: Boolean = true,
         date: Date = Date(),
         var image: String?
 ) : BaseMessage(id, from, chat, isIncoming, date) {
 
-    override fun formatMessage() = "id:$id ${from?.firstName} " +
+    override fun formatMessage() = "${from?.firstName} " +
             "${if (isIncoming) "получил" else "отправил"} изображение \"$image\" ${date.humanizeDiff()}"
 }
