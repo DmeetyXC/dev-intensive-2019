@@ -11,22 +11,32 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         Question.IDLE -> Question.IDLE.question
     }
 
-    fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> =
-        if (question == Question.IDLE) {
-            question.question to status.color
-        } else
-            if (question.answer.contains(answer)) {
-                question = question.nextQuestion()
-                "Отлично - ты справился\n${question.question}" to status.color
-            } else
-                if (status == Status.CRITICAL) {
-                    status = Status.NORMAL
-                    question = Question.NAME
-                    "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
-                } else {
-                    status = status.nextStatus()
-                    "Это неправильный ответ\n${question.question}" to status.color
-                }
+    fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
+        return when (question) {
+            Question.IDLE -> question.question to status.color
+            else -> "${checkAnswer(answer)}\n${question.question}" to status.color
+        }
+    }
+
+    private fun checkAnswer(answer: String): String {
+        return if (question.answer.contains(answer)) {
+            question = question.nextQuestion()
+            "Отлично - ты справился"
+        } else {
+            if (status == Status.CRITICAL) {
+                resetStates()
+                "Это неправильный ответ. Давай все по новой"
+            } else {
+                status = status.nextStatus()
+                "Это неправильный ответ"
+            }
+        }
+    }
+
+    private fun resetStates() {
+        status = Status.NORMAL
+        question = Question.NAME
+    }
 
     enum class Status(val color: Triple<Int, Int, Int>) {
         NORMAL(Triple(255, 255, 255)),
@@ -35,34 +45,32 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         CRITICAL(Triple(255, 0, 0));
 
         fun nextStatus(): Status {
-            return if (this.ordinal < values().lastIndex) {
+            return if (this.ordinal < values().lastIndex)
                 values()[this.ordinal + 1]
-            } else {
-                values()[0]
-            }
+            else values()[0]
         }
     }
 
     enum class Question(val question: String, val answer: List<String>) {
         NAME("Как меня зовут?", listOf("бендер", "bender")) {
             override fun nextQuestion(): Question = PROFESSION
-            override fun validate(answer: String): Boolean = normalize(answer, "^[A-Z|А-Я].*")
+            override fun validate(answer: String): Boolean = answer.trim().firstOrNull()?.isUpperCase() ?: false
         },
         PROFESSION("Назови мою профессию?", listOf("сгибальщик", "bender")) {
             override fun nextQuestion(): Question = MATERIAL
-            override fun validate(answer: String): Boolean = normalize(answer, "^[a-z|а-я].*")
+            override fun validate(answer: String): Boolean = answer.trim().firstOrNull()?.isLowerCase() ?: false
         },
         MATERIAL("Из чего я сделан?", listOf("металл", "дерево", "iron", "wood", "metal")) {
             override fun nextQuestion(): Question = BDAY
-            override fun validate(answer: String): Boolean = normalize(answer, "^[^0-9]+$")
+            override fun validate(answer: String): Boolean = answer.trim().contains(Regex("\\d")).not()
         },
         BDAY("Когда меня создали?", listOf("2993")) {
             override fun nextQuestion(): Question = SERIAL
-            override fun validate(answer: String): Boolean = normalize(answer, "^[0-9]+$")
+            override fun validate(answer: String): Boolean = answer.trim().contains(Regex("^[0-9]*$"))
         },
         SERIAL("Мой серийный номер?", listOf("2716057")) {
             override fun nextQuestion(): Question = IDLE
-            override fun validate(answer: String): Boolean = normalize(answer, "^[0-9]{7}$")
+            override fun validate(answer: String): Boolean = answer.trim().contains(Regex("^[0-9]{7}$"))
         },
         IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
@@ -71,6 +79,5 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
         abstract fun nextQuestion(): Question
         abstract fun validate(answer: String): Boolean
-        fun normalize(answer: String, regex_: String): Boolean = answer.trim().contains(Regex(regex_))
     }
 }

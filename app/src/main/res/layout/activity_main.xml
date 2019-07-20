@@ -21,7 +21,7 @@
             android:textSize="@dimen/font_large_24"/>
 
     <ImageView
-            android:id="@+id/lv_bender"
+            android:id="@+id/iv_bender"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:src="@drawable/bender_dance"
