@@ -4,15 +4,34 @@
         <attr name="aspectRatio" format="float" />
     </declare-styleable>
 
+    <declare-styleable name="CircleImageView">
+        <attr name="cv_borderWidth" format="dimension" />
+        <attr name="cv_borderColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="AvatarImageView">
+        <attr name="initials" format="string" />
+    </declare-styleable>
+
     <attr name="colorAccentedSurface" format="reference" />
     <attr name="colorDivider" format="reference" />
     <attr name="colorIcon" format="reference" />
 
-    <declare-styleable name="CircleImageView">
-        <attr name="cv_borderColor" format="reference" />
-        <attr name="cv_borderWidth" format="dimension" />
-        <attr name="highlightEnable" format="boolean" />
-        <attr name="highlightColor" format="color" />
-    </declare-styleable>
+    <!--Color for DAY and NIGHT themes-->
+    <attr name="colorToolbar" format="reference" />
+    <attr name="colorBackground" format="reference" />
+    <attr name="colorItemView" format="reference" />
+    <attr name="colorCounter" format="reference" />
+    <attr name="colorArchiveIcon" format="reference" />
+    <attr name="colorSwipe" format="reference" />
+    <attr name="colorSelected" format="reference" />
+    <attr name="colorSnackBar" format="reference" />
+    <attr name="colorChipCloseTint" format="reference" />
+    <attr name="colorChipBackground" format="reference" />
+    <attr name="colorIndicator" format="reference" />
+
+    <attr name="colorText" format="reference" />
+    <attr name="colorTitle" format="reference" />
+    <attr name="colorSnackBarText" format="reference" />
 
 </resources>
